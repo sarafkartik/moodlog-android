@@ -1,3 +1,40 @@
 <resources>
-    <string name="app_name">Moodlog</string>
+    <string name="app_name">moodlog🗒️</string>
+    <string name="hello_text">Hello</string>
+    <string name="ok_button_text">OK</string>
+    <string name="continue_button_text">Continue</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="reset_button_text">Reset</string>
+    <string name="name_input_view_heading">What would you like to be called?</string>
+    <string name="name_input_view_text_hint">Enter your name or alias</string>
+    <string name="mood_log_page_title">How are you feeling today?</string>
+    <string name="mood_log_page_reflection_note_hint">Why do you feel this way?</string>
+    <string name="unknown_mood">Unknown</string>
+    <string name="success">Success!</string>
+    <string name="mood_saved_message">🗒️ Mood logged successfully.</string>
+    <!-- Menu Items -->
+    <string name="mood_history">Mood History</string>
+    <string name="mood_prediction">Mood Prediction</string>
+    <string name="mood_analysis">Mood Analysis</string>
+    <string name="clean_slate">Clean Slate!</string>
+    <string name="mood_trends_last_7_days">Mood Trends from the Last 7 Days</string>
+    <string name="no_moods_logged_yet">Log mood at least once to unlock this feature.</string>
+    <string name="mood_frequency_analysis">Mood Analysis</string>
+    <string name="mood_frequency_analysis_label">Mood Frequency Analysis</string>
+    <string name="mood_insights">Mood Insights:\n</string>
+    <string name="least_prevalent_mood">Least Prevalent Mood</string>
+    <string name="most_prevalent_mood">Most Prevalent Mood</string>
+    <string name="mood_flexibility_message">There’s a good variation in your moods, indicating emotional flexibility.\n</string>
+    <string name="mood_stability_message_prefix">You have mostly felt </string>
+    <string name="mood_stability_message_suffix">, showing mood stability.\n</string>
+    <string name="result_label">*Cumulative Sentiment Analysis</string>
+    <string name="mood_prediction_label">Mood Prediction</string>
+    <string name="mood_prediction_empty_label">Log for at least 3 days to unlock this feature.</string>
+    <string name="mood_analysis_empty_label">Log mood at least once to unlock this feature.</string>
+    <string name="last_three_logged_moods">Your last 3 logged moods…</string>
+    <string name="mood_prediction_for_tomorrow">*Mood Prediction for tomorrow:</string>
+    <string name="mood_prediction_disclaimer">*This app uses Artificial Intelligence for mood prediction, and the results may not always be accurate.</string>
+    <string name="sentiment_analysis_disclaimer">*This app uses Artificial Intelligence for sentiment analysis, and the results may not always be accurate.</string>
 </resources>
+
+
