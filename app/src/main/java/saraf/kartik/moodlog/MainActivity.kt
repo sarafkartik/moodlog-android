@@ -1,6 +1,6 @@
 package saraf.kartik.moodlog
 
-import android.content.res.Configuration
+import AppContentView
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
@@ -8,12 +8,11 @@ import android.view.WindowInsetsController
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
@@ -37,10 +36,6 @@ fun MoodLogTheme(content: @Composable () -> Unit) {
     )
 }
 
-@Composable
-fun Hello() {
-    Text("hello moodlog")
-}
 
 
 class MainActivity : ComponentActivity() {
@@ -49,10 +44,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MoodLogTheme {
-                Hello()
+                AppContentView(this)
             }
         }
-        hideSystemUI()
+        //hideSystemUI()
     }
 
     private fun hideSystemUI() {
@@ -80,7 +75,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HelloPreview() {
     MoodLogTheme {
-        Hello()
+      AppContentView(LocalContext.current)
     }
 }
 

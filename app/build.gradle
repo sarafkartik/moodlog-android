@@ -54,6 +54,8 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.runtime.livedata
     implementation libs.material3
+    implementation libs.androidx.preference.ktx
+
 
     debugImplementation libs.androidx.ui.tooling
     debugImplementation libs.androidx.ui.test.manifest

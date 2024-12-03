@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name_simple">moodlog</string>
     <string name="app_name">moodlog🗒️</string>
     <string name="hello_text">Hello</string>
     <string name="ok_button_text">OK</string>
