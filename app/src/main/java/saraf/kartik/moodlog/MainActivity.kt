@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true, device = Devices.PIXEL_7)
 @Composable
-fun HelloPreview() {
+fun MainPreview() {
     MoodLogTheme {
       AppContentView(LocalContext.current)
     }
