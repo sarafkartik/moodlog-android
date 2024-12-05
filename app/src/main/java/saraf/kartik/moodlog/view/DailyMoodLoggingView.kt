@@ -38,7 +38,7 @@ fun DailyMoodLoggingView(
     onCleanSlate: () -> Unit
 ) {
     val moodViewModel: MoodViewModel = viewModel(
-        factory = MoodViewModelFactory()
+        factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
     )
     var isDrawerOpen by remember { mutableStateOf(false) }
     var selectedMood by remember { mutableStateOf("") }
@@ -143,7 +143,11 @@ fun DailyMoodLoggingView(
             // Submit Button
             TextButton(
                 onClick = {
-                    //moodManager.saveMood(userName, selectedMood, reflectionNote)
+                    moodViewModel.saveMoodEntry(
+                        userName = userName,
+                        mood = selectedMood,
+                        reflectionNote = reflectionNote
+                    )
                     selectedMood = ""
                     reflectionNote = ""
                     scope.launch {

@@ -12,19 +12,12 @@ abstract class MoodHistoryDatabase : RoomDatabase() {
     abstract fun moodDao(): MoodDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: MoodHistoryDatabase? = null
+        private const val dbName = "mood_history_database"
 
-        fun getInstance(context: Context): MoodHistoryDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    MoodHistoryDatabase::class.java,
-                    "mood_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
+        fun build(context: Context): MoodHistoryDatabase {
+            return Room.databaseBuilder(context, MoodHistoryDatabase::class.java, dbName)
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }
