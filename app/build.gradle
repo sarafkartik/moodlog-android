@@ -1,6 +1,10 @@
 plugins {
+
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
+
+
 }
 
 android {
@@ -24,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_18
+        targetCompatibility JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = '11'
+        jvmTarget = '18'
     }
     buildFeatures {
         compose true
@@ -55,6 +59,11 @@ dependencies {
     implementation libs.androidx.runtime.livedata
     implementation libs.material3
     implementation libs.androidx.preference.ktx
+    def room_version = "2.5.2"
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    ksp "androidx.room:room-compiler:$room_version"
+
 
 
     debugImplementation libs.androidx.ui.tooling
