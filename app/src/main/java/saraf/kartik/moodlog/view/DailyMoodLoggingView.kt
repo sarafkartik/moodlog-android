@@ -22,10 +22,13 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.Constants
+import saraf.kartik.moodlog.view.vm.MoodViewModel
 
 @Composable
 fun DailyMoodLoggingView(
@@ -34,6 +37,9 @@ fun DailyMoodLoggingView(
     //moodManager: MoodManager,
     onCleanSlate: () -> Unit
 ) {
+    val moodViewModel: MoodViewModel = viewModel(
+        factory = MoodViewModelFactory()
+    )
     var isDrawerOpen by remember { mutableStateOf(false) }
     var selectedMood by remember { mutableStateOf("") }
     var reflectionNote by remember { mutableStateOf("") }
@@ -206,7 +212,8 @@ fun DailyMoodLoggingView(
                     reflectionNote = ""
                     onCleanSlate()
                 },
-                isDrawerOpen = { isDrawerOpen = false }
+                isDrawerOpen = { isDrawerOpen = false },
+                moodViewModel = moodViewModel
             )
         }
 
@@ -215,6 +222,7 @@ fun DailyMoodLoggingView(
 
 @Composable
 fun DrawerView(
+    moodViewModel: MoodViewModel,
     userName: String,
     onCleanSlate: () -> Unit,
     isDrawerOpen: () -> Unit
@@ -258,6 +266,7 @@ fun DrawerView(
         }
         Spacer(modifier = Modifier.height(5.dp))
         TextButton(onClick = {
+            moodViewModel.clearMoodHistoryForUser(userName)
             onCleanSlate()
             isDrawerOpen()
         }) {

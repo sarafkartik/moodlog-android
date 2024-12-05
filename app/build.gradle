@@ -55,6 +55,12 @@ dependencies {
     implementation libs.androidx.runtime.livedata
     implementation libs.material3
     implementation libs.androidx.preference.ktx
+    def room_version = "2.6.1"
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.room.ktx
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+
 
 
     debugImplementation libs.androidx.ui.tooling
