@@ -1,9 +1,8 @@
-package saraf.kartik.moodlog.view
+package saraf.kartik.moodlog.view.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import saraf.kartik.moodlog.MoodLogApplication
-import saraf.kartik.moodlog.view.vm.MoodViewModel
 
 @Suppress("UNCHECKED_CAST")
 class MoodViewModelFactory(private val application: MoodLogApplication) : ViewModelProvider.Factory {

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.PreferenceManager
 import saraf.kartik.moodlog.view.DailyMoodLoggingView
+import saraf.kartik.moodlog.view.MoodHistoryView
 
 @Composable
 fun AppContentView(context: Context) {
@@ -33,12 +34,12 @@ fun AppContentView(context: Context) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.White) // Replace with desired background color
+                        .background(Color.White)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.moodlog_icon), // Replace with your image resource
+                        painter = painterResource(id = R.drawable.moodlog_icon),
                         contentDescription = "Loading",
-                        modifier = Modifier.size(150.dp) // Adjust size as needed
+                        modifier = Modifier.size(150.dp)
                     )
                 }
             }
@@ -61,12 +62,10 @@ fun AppContentView(context: Context) {
 }
 
 
-// Helper function to save the user name
 fun saveUserName(context: Context, userName: String) {
     PreferenceManager.saveUserName(context, userName)
 }
 
-// Helper function to clear the user name
 fun clearUserName(context: Context) {
     PreferenceManager.clearUserName(context)
 }

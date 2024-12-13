@@ -29,13 +29,13 @@ import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.Constants
 import saraf.kartik.moodlog.view.vm.MoodViewModel
+import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 
 @Composable
 fun DailyMoodLoggingView(
     userName: String,
     context: Context,
-    //moodManager: MoodManager,
-    onCleanSlate: () -> Unit
+    onCleanSlate: () -> Unit,
 ) {
     val moodViewModel: MoodViewModel = viewModel(
         factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
@@ -49,13 +49,11 @@ fun DailyMoodLoggingView(
     val characterLimit = 50
 
     Box(Modifier.fillMaxSize()) {
-        // Main Content
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { isDrawerOpen = true }) {
                     Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -67,14 +65,12 @@ fun DailyMoodLoggingView(
                 )
             }
 
-            // Title
             Text(
                 text = stringResource(R.string.mood_log_page_title),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            // Mood Grid
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -118,7 +114,6 @@ fun DailyMoodLoggingView(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Reflection Note Input
             OutlinedTextField(
                 value = reflectionNote,
                 onValueChange = { reflectionNote = it },
@@ -140,7 +135,6 @@ fun DailyMoodLoggingView(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Submit Button
             TextButton(
                 onClick = {
                     moodViewModel.saveMoodEntry(
@@ -177,7 +171,6 @@ fun DailyMoodLoggingView(
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Reset Button
             TextButton(
                 onClick = {
                     selectedMood = ""
@@ -201,7 +194,6 @@ fun DailyMoodLoggingView(
             }
         }
 
-        // Drawer
         if (isDrawerOpen) {
             Box(
                 modifier = Modifier
@@ -229,7 +221,7 @@ fun DrawerView(
     moodViewModel: MoodViewModel,
     userName: String,
     onCleanSlate: () -> Unit,
-    isDrawerOpen: () -> Unit
+    isDrawerOpen: () -> Unit,
 ) {
     Column(
         modifier = Modifier
