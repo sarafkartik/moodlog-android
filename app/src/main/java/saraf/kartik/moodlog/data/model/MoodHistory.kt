@@ -12,7 +12,10 @@ data class MoodHistory(
     @ColumnInfo(name = "note") val note: String,
     @ColumnInfo(name = "time_stamp") val timestamp: String
 
-){
+)
+
+object MoodUtils{
+    val moodStrings = listOf("Happy", "Sad", "Angry", "Anxious", "Neutral", "Excited")
     fun getEmoji(mood: String): String {
         return when (mood) {
             "Happy" -> "😊"
@@ -21,12 +24,7 @@ data class MoodHistory(
             "Anxious" -> "😰"
             "Neutral" -> "😐"
             "Excited" -> "😃"
-            else -> "😶" // Default case for unrecognized moods
+            else -> "😶"
         }
     }
-
-    companion object{
-        val moodStrings = listOf("Happy", "Sad", "Angry", "Anxious", "Neutral", "Excited")
-    }
-
 }

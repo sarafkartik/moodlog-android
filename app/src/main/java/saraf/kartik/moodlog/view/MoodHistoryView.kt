@@ -30,9 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.data.model.MoodHistory
+import saraf.kartik.moodlog.data.model.MoodUtils
 import saraf.kartik.moodlog.view.vm.MoodViewModel
 import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 
@@ -41,7 +44,7 @@ import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 fun MoodHistoryView(
     userName: String,
     context: Context,
-    onBack: () -> Unit,
+    navController: NavHostController
 ) {
     val moodViewModel: MoodViewModel = viewModel(
         factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
@@ -68,7 +71,9 @@ fun MoodHistoryView(
                     color = colorResource(R.color.lavender)
                 )
             }, navigationIcon = {
-                IconButton(onClick = { onBack() }) {
+                IconButton(onClick = {
+                    navController.popBackStack()
+                }) {
                     Icon(Icons.AutoMirrored.Default.ArrowBack, contentDescription = "Back")
                 }
             })
@@ -144,7 +149,7 @@ fun MoodHistoryItem(mood: MoodHistory) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = mood.getEmoji(mood.mood),
+                text = MoodUtils.getEmoji(mood.mood),
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(end = 12.dp)
             )
@@ -167,7 +172,7 @@ fun MoodHistoryItem(mood: MoodHistory) {
 
 @Composable
 fun MoodComparisonChart(filteredMoodHistory: List<MoodHistory>) {
-    val moodStrings = MoodHistory.moodStrings
+    val moodStrings = MoodUtils.moodStrings
     val moodCounts = mutableMapOf<String, Int>().apply {
         moodStrings.forEach { this[it] = 0 }
     }
@@ -232,9 +237,7 @@ fun MoodHistoryViewPreview() {
     MoodHistoryView(
         userName = "k",
         context = LocalContext.current,
-        onBack = {
-
-        }
+        navController = rememberNavController()
     )
 }
 

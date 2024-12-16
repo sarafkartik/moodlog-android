@@ -23,11 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.Constants
+import saraf.kartik.moodlog.view.navigation.Routes
 import saraf.kartik.moodlog.view.vm.MoodViewModel
 import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 
@@ -36,6 +39,7 @@ fun DailyMoodLoggingView(
     userName: String,
     context: Context,
     onCleanSlate: () -> Unit,
+    navController: NavHostController,
 ) {
     val moodViewModel: MoodViewModel = viewModel(
         factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
@@ -209,7 +213,9 @@ fun DailyMoodLoggingView(
                     onCleanSlate()
                 },
                 isDrawerOpen = { isDrawerOpen = false },
-                moodViewModel = moodViewModel
+                moodViewModel = moodViewModel,
+                navController = navController
+
             )
         }
 
@@ -222,6 +228,7 @@ fun DrawerView(
     userName: String,
     onCleanSlate: () -> Unit,
     isDrawerOpen: () -> Unit,
+    navController: NavHostController,
 ) {
     Column(
         modifier = Modifier
@@ -231,7 +238,7 @@ fun DrawerView(
             .padding(16.dp)
     ) {
         TextButton(onClick = {
-
+            navController.navigate(Routes.MoodHistoryRoute.route)
         }) {
             Text(
                 text = stringResource(R.string.mood_history),
@@ -283,7 +290,8 @@ fun DailyMoodLoggingViewPreview() {
         context = LocalContext.current,
         onCleanSlate = {
 
-        }
+        },
+        navController = rememberNavController()
     )
 }
 
