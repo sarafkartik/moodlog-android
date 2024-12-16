@@ -23,19 +23,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.Constants
+import saraf.kartik.moodlog.view.navigation.Routes
 import saraf.kartik.moodlog.view.vm.MoodViewModel
+import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 
 @Composable
 fun DailyMoodLoggingView(
     userName: String,
     context: Context,
-    //moodManager: MoodManager,
-    onCleanSlate: () -> Unit
+    onCleanSlate: () -> Unit,
+    navController: NavHostController,
 ) {
     val moodViewModel: MoodViewModel = viewModel(
         factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
@@ -49,13 +53,11 @@ fun DailyMoodLoggingView(
     val characterLimit = 50
 
     Box(Modifier.fillMaxSize()) {
-        // Main Content
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Header
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { isDrawerOpen = true }) {
                     Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -67,14 +69,12 @@ fun DailyMoodLoggingView(
                 )
             }
 
-            // Title
             Text(
                 text = stringResource(R.string.mood_log_page_title),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
 
-            // Mood Grid
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -118,7 +118,6 @@ fun DailyMoodLoggingView(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Reflection Note Input
             OutlinedTextField(
                 value = reflectionNote,
                 onValueChange = { reflectionNote = it },
@@ -140,7 +139,6 @@ fun DailyMoodLoggingView(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Submit Button
             TextButton(
                 onClick = {
                     moodViewModel.saveMoodEntry(
@@ -177,7 +175,6 @@ fun DailyMoodLoggingView(
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Reset Button
             TextButton(
                 onClick = {
                     selectedMood = ""
@@ -201,7 +198,6 @@ fun DailyMoodLoggingView(
             }
         }
 
-        // Drawer
         if (isDrawerOpen) {
             Box(
                 modifier = Modifier
@@ -217,7 +213,9 @@ fun DailyMoodLoggingView(
                     onCleanSlate()
                 },
                 isDrawerOpen = { isDrawerOpen = false },
-                moodViewModel = moodViewModel
+                moodViewModel = moodViewModel,
+                navController = navController
+
             )
         }
 
@@ -229,7 +227,8 @@ fun DrawerView(
     moodViewModel: MoodViewModel,
     userName: String,
     onCleanSlate: () -> Unit,
-    isDrawerOpen: () -> Unit
+    isDrawerOpen: () -> Unit,
+    navController: NavHostController,
 ) {
     Column(
         modifier = Modifier
@@ -239,7 +238,7 @@ fun DrawerView(
             .padding(16.dp)
     ) {
         TextButton(onClick = {
-
+            navController.navigate(Routes.MoodHistoryRoute.route)
         }) {
             Text(
                 text = stringResource(R.string.mood_history),
@@ -291,7 +290,8 @@ fun DailyMoodLoggingViewPreview() {
         context = LocalContext.current,
         onCleanSlate = {
 
-        }
+        },
+        navController = rememberNavController()
     )
 }
 
