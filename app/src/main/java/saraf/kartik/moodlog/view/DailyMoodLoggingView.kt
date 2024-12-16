@@ -146,7 +146,7 @@ fun DailyMoodLoggingView(
                     moodViewModel.saveMoodEntry(
                         userName = userName,
                         mood = selectedMood,
-                        reflectionNote = reflectionNote
+                        reflectionNote = reflectionNote.ifEmpty { selectedMood }
                     )
                     selectedMood = ""
                     reflectionNote = ""
