@@ -66,6 +66,7 @@ fun MoodAnalysisView(
         factory = MoodViewModelFactory(context.applicationContext as MoodLogApplication)
     )
     val moodInsights by moodViewModel.moodInsights.collectAsState()
+    val sentimentAnalysisResult:String by moodViewModel.sentimentAnalysisResult.collectAsState()
     var moodAnalysisInsights: List<String>
     var isLoading by remember { mutableStateOf(true) }
 
@@ -181,45 +182,63 @@ fun MoodAnalysisView(
                     item {
                         moodAnalysisInsights =
                             moodViewModel.generateMoodInsights(moodInsights,7,userName)
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .background(Color.LightGray.copy(alpha = 0.7f))
-                                .padding(16.dp)
-                        ) {
-                            Text(text = "Mood Insights", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Row {
-                                Text(
-                                    text = stringResource(R.string.most_prevalent_mood),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = moodAnalysisInsights.getOrNull(0) ?: "N/A",
-                                    style = MaterialTheme.typography.bodyLarge,
-                                )
+                        Column {
+                            Spacer(modifier = Modifier.height(36.dp))
+                            Text(
+                                text = stringResource(R.string.mood_insights),
+                                style = MaterialTheme.typography.headlineSmall,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+                            )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 24.dp)
+                                    .background(Color.LightGray.copy(alpha = 0.7f))
+                                    .padding(16.dp)
+                            ) {
+                                Row {
+                                    Text(
+                                        text = stringResource(R.string.most_prevalent_mood),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = moodAnalysisInsights.getOrNull(0) ?: "N/A",
+                                        style = MaterialTheme.typography.bodyLarge,
+                                    )
+                                }
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                                Row {
+                                    Text(
+                                        text = stringResource(R.string.least_prevalent_mood),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = moodAnalysisInsights.getOrNull(1) ?: "N/A",
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                }
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                                Column {
+                                    Text(
+                                        text = stringResource(R.string.result_label),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                    Text(
+                                        text = sentimentAnalysisResult,
+                                        style = MaterialTheme.typography.bodyLarge
+                                    )
+                                }
+                                Spacer(Modifier.height(8.dp))
                             }
-
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                            Row {
-                                Text(
-                                    text = stringResource(R.string.least_prevalent_mood),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Text(
-                                    text = moodAnalysisInsights.getOrNull(1) ?: "N/A",
-                                    style = MaterialTheme.typography.bodyLarge
-                                )
-                            }
-//                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-//                            Text(
-//                                text = "Overall Sentiment: ${moodManager.generateSentimentAnalysis(userName) ?: "No Data"}",
-//                                style = MaterialTheme.typography.body1
-//                            )
                         }
+                    }
+
+                    item {
+                        Text(stringResource(R.string.sentiment_analysis_disclaimer),style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth().padding(20.dp))
                     }
 
                 }

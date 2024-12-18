@@ -24,11 +24,14 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
     private val sentimentAnalyzer = SentimentAnalyzer(application.baseContext)
     private val prefix = "You have mostly felt"
     private val suffix = ", showing mood stability.\n"
-    private val moodFlexibility = "There’s a good variation in your moods, indicating emotional flexibility.\n"
+    private val moodFlexibility =
+        "There’s a good variation in your moods, indicating emotional flexibility.\n"
     private val _moodHistory = MutableStateFlow<List<MoodHistory>?>(emptyList())
     private val _moodInsights = MutableStateFlow<Map<String, Double>>(mutableMapOf())
+    private val _sentimentAnalysisResult = MutableStateFlow("Unknown")
     val moodHistory: StateFlow<List<MoodHistory>?> = _moodHistory
     val moodInsights: StateFlow<Map<String, Double>> = _moodInsights
+    val sentimentAnalysisResult: StateFlow<String> = _sentimentAnalysisResult
 
 
     fun loadMoodHistory(userName: String, stopLoading: () -> Unit) {
@@ -57,7 +60,7 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
 
     fun calculateMoodFrequencies(days: Int, userName: String, stopLoading: () -> Unit) {
         viewModelScope.launch {
-            val allMoodLogs =  moodUseCase.getMoodsForUser(userName)
+            val allMoodLogs = moodUseCase.getMoodsForUser(userName)
             val moodLogs = getFilteredMoodHistory(allMoodLogs)
             if (!moodLogs.isNullOrEmpty()) {
                 val moodCount = moodLogs.groupBy { it.mood }
@@ -66,17 +69,81 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
                 _moodInsights.value = moodCount.mapValues { (_, count) ->
                     if (totalLogs > 0) (count / totalLogs) * 100 else 0.0
                 }
+                _sentimentAnalysisResult.value = calculateMoodSentimentAnalysis(moodLogs)
             }
             stopLoading()
         }
     }
 
-    fun generateMoodInsights(moodFrequencies:Map<String,Double>,days: Int, userName: String): List<String> {
-        val mostFrequentMood = moodFrequencies.maxWithOrNull(compareBy<Map.Entry<String, Double>> { it.value }
-            .thenBy { it.key }) ?: return emptyList()
+    private fun calculateMoodSentimentAnalysis(moodLogs: List<MoodHistory>): String {
+        var result = "Your overall sentiment has been:"
+        val sentimentAnalysisResult = mutableListOf<String>()
+        if (moodLogs.isNotEmpty()) {
+            for (entry in moodLogs) {
+                val sentimentAnalysis = sentimentAnalyzer.classifyMood(entry.note)
 
-        val leastFrequentMood = moodFrequencies.minWithOrNull(compareBy<Map.Entry<String, Double>> { it.value }
-            .thenBy { it.key }) ?: return emptyList()
+                sentimentAnalysis.let {
+                    if (it.isNotEmpty()) {
+                        sentimentAnalysisResult.add(it)
+                    }
+                }
+            }
+
+            if (sentimentAnalysisResult.isNotEmpty()) {
+                val sentimentFrequency =
+                    calculateSentimentFrequency(sentiments = sentimentAnalysisResult)
+                var mostFrequentMood: Map.Entry<String, Double>? = null
+                for (entry in sentimentFrequency) {
+                    if (mostFrequentMood == null) {
+                        mostFrequentMood = entry
+                    } else {
+                        if ((entry.value > mostFrequentMood.value) || ((entry.value == mostFrequentMood.value) && (entry.key < mostFrequentMood.key))) {
+                            mostFrequentMood = entry
+                        }
+                    }
+                }
+
+                Log.i("SentimentAnalyser", " ----- ${mostFrequentMood?.key}")
+                if (mostFrequentMood != null) {
+                    result += mostFrequentMood.key
+                    return result
+                }
+            }
+        }
+        result = "No sentiment analysis results available."
+        return result
+    }
+
+    private fun calculateSentimentFrequency(sentiments: List<String>): Map<String, Double> {
+        // Group sentiments by each unique mood and count their occurrences
+        val moodCount = sentiments.groupingBy { it }.eachCount()
+
+        // Calculate the total number of sentiments
+        val totalLogs = sentiments.size.toDouble()
+
+        // Calculate the frequency (percentage) for each mood
+        return moodCount.mapValues { (key, count) ->
+            if (totalLogs > 0) {
+                (count.toDouble() / totalLogs) * 100
+            } else {
+                0.0
+            }
+        }
+    }
+
+
+    fun generateMoodInsights(
+        moodFrequencies: Map<String, Double>,
+        days: Int,
+        userName: String,
+    ): List<String> {
+        val mostFrequentMood =
+            moodFrequencies.maxWithOrNull(compareBy<Map.Entry<String, Double>> { it.value }
+                .thenBy { it.key }) ?: return emptyList()
+
+        val leastFrequentMood =
+            moodFrequencies.minWithOrNull(compareBy<Map.Entry<String, Double>> { it.value }
+                .thenBy { it.key }) ?: return emptyList()
 
         val stabilityThreshold = 60.0
         val predominantMood = moodFrequencies.entries.firstOrNull { it.value >= stabilityThreshold }
@@ -92,7 +159,6 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
 
         return result
     }
-
 
 
     fun saveMoodEntry(userName: String, mood: String, reflectionNote: String) {
@@ -121,5 +187,6 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
         sentimentAnalyzer.close()
         super.onCleared()
     }
+
 
 }
