@@ -1,5 +1,6 @@
 package saraf.kartik.moodlog.view.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +12,7 @@ import saraf.kartik.moodlog.data.MoodHistoryDatabase
 import saraf.kartik.moodlog.data.model.MoodHistory
 import saraf.kartik.moodlog.data.repository.MoodHistoryRepository
 import saraf.kartik.moodlog.utility.DateUtil
+import saraf.kartik.moodlog.utility.SentimentAnalyzer
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -19,6 +21,7 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
     private val db = MoodHistoryDatabase.build(application.baseContext)
     private val repository = MoodHistoryRepository(db.moodDao())
     private val moodUseCase = MoodUseCase(repository)
+    private val sentimentAnalyzer = SentimentAnalyzer(application.baseContext)
     private val prefix = "You have mostly felt"
     private val suffix = ", showing mood stability.\n"
     private val moodFlexibility = "There’s a good variation in your moods, indicating emotional flexibility.\n"
@@ -112,6 +115,11 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
             moodUseCase.clearMoodsForUser(userName)
 
         }
+    }
+
+    override fun onCleared() {
+        sentimentAnalyzer.close()
+        super.onCleared()
     }
 
 }
