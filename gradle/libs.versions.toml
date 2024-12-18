@@ -22,6 +22,10 @@ roomKtx = "2.5.2"
 roomRuntime = "2.5.2"
 ksp = "1.7.20-1.0.8"
 serialization = "1.7.20"
+tensorflowLite = "2.12.0"
+tensorflowLiteGpu = "2.9.0"
+tensorflowLiteSelectTfOps = "2.14.0"
+tensorflowLiteTaskVision = "0.3.1"
 
 
 [libraries]
@@ -55,6 +59,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLiteGpu" }
+tensorflow-lite-select-tf-ops = { module = "org.tensorflow:tensorflow-lite-select-tf-ops", version.ref = "tensorflowLiteSelectTfOps" }
+tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteTaskVision" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

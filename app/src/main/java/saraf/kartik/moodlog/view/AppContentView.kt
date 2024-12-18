@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.utility.PreferenceManager
 import saraf.kartik.moodlog.view.DailyMoodLoggingView
+import saraf.kartik.moodlog.view.MoodAnalysisView
 import saraf.kartik.moodlog.view.MoodHistoryView
 import saraf.kartik.moodlog.view.navigation.Routes
 
@@ -80,6 +81,11 @@ fun NavHostView(
         composable(route = Routes.MOOD_HISTORY_VIEW) {
             MoodHistoryView(userName = userName, context = context, navController = navController)
         }
+
+        composable(route = Routes.MOOD_ANALYSIS_VIEW) {
+            MoodAnalysisView(userName = userName, context = context, navController = navController)
+        }
+
     }
 
 }

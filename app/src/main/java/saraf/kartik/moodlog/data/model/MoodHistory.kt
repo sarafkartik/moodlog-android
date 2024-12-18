@@ -1,5 +1,6 @@
 package saraf.kartik.moodlog.data.model
 
+import androidx.compose.ui.graphics.Color
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -25,6 +26,17 @@ object MoodUtils{
             "Neutral" -> "😐"
             "Excited" -> "😃"
             else -> "😶"
+        }
+    }
+    fun getMoodColor(mood: String): Color {
+        return when (mood) {
+            "Happy" -> Color(0xFFFFEB3B) // Yellow
+            "Sad" -> Color(0xFF2196F3)   // Blue
+            "Angry" -> Color(0xFFF44336) // Red
+            "Anxious" -> Color(0xFF9C27B0) // Purple
+            "Neutral" -> Color(0xFF9E9E9E) // Grey
+            "Excited" -> Color(0xFFFF9800) // Orange
+            else -> Color.Black
         }
     }
 }
