@@ -36,6 +36,7 @@ import saraf.kartik.moodlog.MoodLogApplication
 import saraf.kartik.moodlog.R
 import saraf.kartik.moodlog.data.model.MoodHistory
 import saraf.kartik.moodlog.data.model.MoodUtils
+import saraf.kartik.moodlog.view.components.MoodHistoryItem
 import saraf.kartik.moodlog.view.vm.MoodViewModel
 import saraf.kartik.moodlog.view.vm.MoodViewModelFactory
 
@@ -129,42 +130,6 @@ fun MoodHistoryView(
                         }
                     }
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun MoodHistoryItem(mood: MoodHistory) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp),
-        colors = CardDefaults.cardColors().copy(containerColor = colorResource(R.color.white))
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = MoodUtils.getEmoji(mood.mood),
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier.padding(end = 12.dp)
-            )
-            Column {
-                Text(text = mood.mood, style = MaterialTheme.typography.headlineMedium)
-                Text(
-                    text = mood.note.ifEmpty { mood.mood },
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray
-                )
-                Text(
-                    text = mood.timestamp,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray
-                )
             }
         }
     }

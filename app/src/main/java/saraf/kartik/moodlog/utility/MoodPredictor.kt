@@ -48,13 +48,13 @@ class MoodPredictor(private val context: Context) {
             order(ByteOrder.nativeOrder())
 
             repeat(32) {
-                floatMoods.forEach { putFloat(it) }  // Use putFloat to store float32 values
+                floatMoods.forEach { putFloat(it) }
             }
             rewind()
         }
 
         val outputBuffer =
-            ByteBuffer.allocateDirect(6 * 4 * 32).apply {  // 32 samples, each with 6 classes
+            ByteBuffer.allocateDirect(6 * 4 * 32).apply {
                 order(ByteOrder.nativeOrder())
             }
 
