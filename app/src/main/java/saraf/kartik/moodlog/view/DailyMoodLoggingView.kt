@@ -259,7 +259,7 @@ fun DrawerView(
         }
         Spacer(modifier = Modifier.height(5.dp))
         TextButton(onClick = {
-
+            navController.navigate(Routes.MoodPredictionRoute.route)
         }) {
             Text(
                 text = stringResource(R.string.mood_prediction),
