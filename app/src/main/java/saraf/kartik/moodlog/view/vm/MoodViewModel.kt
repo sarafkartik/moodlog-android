@@ -12,6 +12,7 @@ import saraf.kartik.moodlog.data.MoodHistoryDatabase
 import saraf.kartik.moodlog.data.model.MoodHistory
 import saraf.kartik.moodlog.data.repository.MoodHistoryRepository
 import saraf.kartik.moodlog.utility.DateUtil
+import saraf.kartik.moodlog.utility.MoodPredictor
 import saraf.kartik.moodlog.utility.SentimentAnalyzer
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -22,6 +23,7 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
     private val repository = MoodHistoryRepository(db.moodDao())
     private val moodUseCase = MoodUseCase(repository)
     private val sentimentAnalyzer = SentimentAnalyzer(application.baseContext)
+    private val moodPredictor = MoodPredictor(application.baseContext)
     private val prefix = "You have mostly felt"
     private val suffix = ", showing mood stability.\n"
     private val moodFlexibility =
@@ -29,9 +31,11 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
     private val _moodHistory = MutableStateFlow<List<MoodHistory>?>(emptyList())
     private val _moodInsights = MutableStateFlow<Map<String, Double>>(mutableMapOf())
     private val _sentimentAnalysisResult = MutableStateFlow("Unknown")
+    private val _lastThreeDaysMoodHistory = MutableStateFlow<List<MoodHistory>?>(emptyList())
     val moodHistory: StateFlow<List<MoodHistory>?> = _moodHistory
     val moodInsights: StateFlow<Map<String, Double>> = _moodInsights
     val sentimentAnalysisResult: StateFlow<String> = _sentimentAnalysisResult
+    val lastThreeDaysMoodHistory: StateFlow<List<MoodHistory>?> = _lastThreeDaysMoodHistory
 
 
     fun loadMoodHistory(userName: String, stopLoading: () -> Unit) {
@@ -56,6 +60,31 @@ class MoodViewModel(application: MoodLogApplication) : ViewModel() {
             }
             moodDate?.after(sevenDaysAgo) == true
         }
+    }
+
+    fun getLastThreeMoods(userName: String, stopLoading: () -> Unit) {
+        viewModelScope.launch {
+            val moodHistoryList = moodUseCase.getMoodsForUser(userName)
+
+            val filteredMoods = moodHistoryList?.take(3)
+            if (filteredMoods != null && filteredMoods.size >= 3) {
+                _lastThreeDaysMoodHistory.value = filteredMoods
+            } else {
+                _lastThreeDaysMoodHistory.value = null
+            }
+            stopLoading()
+        }
+    }
+
+    fun getMoodPrediction(moodHistoryList: List<MoodHistory>?): String {
+        if (moodHistoryList != null && moodHistoryList.size >= 3) {
+            return moodPredictor.predictMood(
+                mood1 = moodHistoryList[0].mood,
+                mood2 = moodHistoryList[1].mood,
+                mood3 = moodHistoryList[2].mood
+            )
+        }
+        return "Unknown"
     }
 
     fun calculateMoodFrequencies(days: Int, userName: String, stopLoading: () -> Unit) {
